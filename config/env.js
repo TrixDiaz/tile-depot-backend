@@ -1,0 +1,23 @@
+import dotenv from "dotenv";
+
+dotenv.config({path: ".env"});
+
+export const {
+  SERVER_HOST,
+  SERVER_PORT,
+  NODE_ENV,
+  JWT_SECRET,
+  JWT_REFRESH_SECRET,
+  JWT_EXPIRES_IN,
+  JWT_REFRESH_EXPIRES_IN,
+  MAIL_USER,
+  MAIL_PASS,
+  DATABASE_URL,
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  FRONTEND_URL,
+  PAYMONGO_PUBLIC_KEY,
+  PAYMONGO_SECRET_KEY,
+} = process.env;
