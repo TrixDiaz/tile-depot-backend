@@ -1,7 +1,8 @@
 import cors from "cors";
 
 // List of websites that can access your API
-const allowedOrigins = ["*"];
+// Use "*" to allow all origins, or specify exact origins like ["https://example.com", "https://app.example.com"]
+const allowedOrigins = ["*"]; // Allow all origins
 
 // CORS settings
 const corsOptions = {
@@ -12,6 +13,11 @@ const corsOptions = {
 
     // In development, allow all origins
     if (process.env.NODE_ENV === "development") {
+      return callback(null, true);
+    }
+
+    // Check if wildcard is enabled (allow all origins)
+    if (allowedOrigins.includes("*")) {
       return callback(null, true);
     }
 
