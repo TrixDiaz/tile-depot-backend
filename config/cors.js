@@ -1,16 +1,7 @@
 import cors from "cors";
 
 // List of websites that can access your API
-const allowedOrigins = [
-  "http://localhost:3000", // Your React app
-  "http://localhost:3001", // Backend server
-  "http://localhost:5000", // Postman app
-  "http://localhost:5173", // If using Vite
-  "http://localhost:4173", // Vite preview
-  "http://localhost:8080", // Alternative port
-  "http://localhost:8081", // Mobile app
-  "https://your-production-domain.com", // Your live website
-];
+const allowedOrigins = ["*"];
 
 // CORS settings
 const corsOptions = {
