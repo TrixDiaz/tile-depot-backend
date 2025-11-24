@@ -1,7 +1,6 @@
 import express from "express";
 import helmetConfig from "./config/helmet.js";
 import corsConfig from "./config/cors.js";
-import ratelimiter from "./config/rate-limit.js";
 import {SERVER_HOST, SERVER_PORT} from "./config/env.js";
 import {authRouter} from "./routes/auth-routes.js";
 import errorMiddleware from "./middlewares/error-middleware.js";
@@ -88,6 +87,25 @@ app.get("/", (_req, res) => {
 // Error handling middleware
 app.use(errorMiddleware);
 
-app.listen(SERVER_PORT, SERVER_HOST, () => {
-  console.log(`🚀 Server is running on http://${SERVER_HOST}:${SERVER_PORT}`);
+// Start server
+// If SERVER_HOST is undefined, Express listens on all interfaces (0.0.0.0)
+// This is ideal for deployment platforms
+const server = app.listen(SERVER_PORT, SERVER_HOST, () => {
+  const host = SERVER_HOST || "0.0.0.0";
+  const port = SERVER_PORT;
+  console.log(`🚀 Server is running on http://${host}:${port}`);
+  console.log(`📦 Environment: ${process.env.NODE_ENV || "development"}`);
+  if (SERVER_HOST) {
+    console.log(`🌐 Listening on specific host: ${SERVER_HOST}`);
+  } else {
+    console.log(`🌐 Listening on all network interfaces (0.0.0.0)`);
+  }
+});
+
+// Graceful shutdown
+process.on("SIGTERM", () => {
+  console.log("SIGTERM signal received: closing HTTP server");
+  server.close(() => {
+    console.log("HTTP server closed");
+  });
 });

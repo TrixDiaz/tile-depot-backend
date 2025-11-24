@@ -2,9 +2,13 @@ import dotenv from "dotenv";
 
 dotenv.config({path: ".env"});
 
+// Server configuration with deployment-friendly defaults
+// PORT is commonly used by deployment platforms (Railway, Render, Heroku, etc.)
+// SERVER_HOST defaults to undefined (Express will listen on all interfaces)
+export const SERVER_PORT = process.env.PORT || process.env.SERVER_PORT || 3000;
+export const SERVER_HOST = process.env.SERVER_HOST || undefined; // undefined = listen on all interfaces (0.0.0.0)
+
 export const {
-  SERVER_HOST,
-  SERVER_PORT,
   NODE_ENV,
   JWT_SECRET,
   JWT_REFRESH_SECRET,
