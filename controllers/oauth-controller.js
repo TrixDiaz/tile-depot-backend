@@ -8,6 +8,7 @@ import {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
   FRONTEND_URL,
+  BACKEND_URL,
 } from "../config/env.js";
 import {generateAccessToken, generateRefreshToken} from "../config/jwt.js";
 
@@ -112,10 +113,17 @@ const oauthGithubCallback = async (req, res, next) => {
 };
 
 // Google OAuth - Initiate authentication
-const oauthGoogle = async (_req, res, next) => {
+const oauthGoogle = async (req, res, next) => {
   try {
-    const redirectUri = `http://localhost:5000/api/v1/oauth/google/callback`;
-    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${redirectUri}&response_type=code&scope=email profile&access_type=offline&prompt=consent`;
+    // Construct backend URL from request or use environment variable
+    const backendBaseUrl =
+      BACKEND_URL ||
+      `${req.protocol}://${req.get("host")}` ||
+      "http://localhost:5000";
+    const redirectUri = `${backendBaseUrl}/api/v1/oauth/google/callback`;
+    const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${GOOGLE_CLIENT_ID}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=code&scope=email profile&access_type=offline&prompt=consent`;
 
     res.redirect(url);
   } catch (error) {
@@ -134,7 +142,12 @@ const oauthGoogleCallback = async (req, res, next) => {
       return next(error);
     }
 
-    const redirectUri = `http://localhost:5000/api/v1/oauth/google/callback`;
+    // Construct backend URL from request or use environment variable
+    const backendBaseUrl =
+      BACKEND_URL ||
+      `${req.protocol}://${req.get("host")}` ||
+      "http://localhost:5000";
+    const redirectUri = `${backendBaseUrl}/api/v1/oauth/google/callback`;
 
     // Exchange code for access token
     const tokenResponse = await axios.post(
@@ -145,6 +158,11 @@ const oauthGoogleCallback = async (req, res, next) => {
         code,
         redirect_uri: redirectUri,
         grant_type: "authorization_code",
+      },
+      {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       }
     );
 
