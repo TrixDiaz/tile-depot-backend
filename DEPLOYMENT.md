@@ -24,8 +24,10 @@ JWT_SECRET=your-strong-secret-key-here
 JWT_REFRESH_SECRET=your-strong-refresh-secret-here
 JWT_EXPIRES_IN=15m
 JWT_REFRESH_EXPIRES_IN=7d
-MAIL_USER=your-email@gmail.com
-MAIL_PASS=your-app-password
+RESEND_API_KEY=re_your-resend-api-key
+MAIL_FROM_EMAIL=noreply@yourdomain.com
+MAIL_FROM_NAME=Your App Name
+ADMIN_EMAIL=admin@yourdomain.com
 FRONTEND_URL=https://your-frontend-domain.com
 ```
 
@@ -275,8 +277,10 @@ Consider migrating to cloud storage for production:
 | `JWT_SECRET`         | ✅       | -         | Strong secret key                        |
 | `JWT_REFRESH_SECRET` | ✅       | -         | Strong secret key                        |
 | `FRONTEND_URL`       | ✅       | -         | Your frontend domain                     |
-| `MAIL_USER`          | ✅       | -         | Email for sending OTPs                   |
-| `MAIL_PASS`          | ✅       | -         | Email app password                       |
+| `RESEND_API_KEY`     | ✅       | -         | Resend API key for email service         |
+| `MAIL_FROM_EMAIL`    | ✅       | -         | Email address to send from               |
+| `MAIL_FROM_NAME`     | ❌       | -         | Display name for sender (optional)       |
+| `ADMIN_EMAIL`        | ✅       | -         | Admin email for contact form submissions |
 
 ### Common Commands
 

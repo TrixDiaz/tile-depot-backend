@@ -1,5 +1,5 @@
 import {sendContactEmail} from "../config/mailer.js";
-import {MAIL_USER} from "../config/env.js";
+import {ADMIN_EMAIL, MAIL_FROM_EMAIL} from "../config/env.js";
 
 const submitContactForm = async (req, res, next) => {
   try {
@@ -20,9 +20,9 @@ const submitContactForm = async (req, res, next) => {
       return next(error);
     }
 
-    // Send email to the configured mail user (admin email)
+    // Send email to the configured admin email
     await sendContactEmail({
-      to: MAIL_USER,
+      to: ADMIN_EMAIL || MAIL_FROM_EMAIL,
       firstName,
       lastName,
       email,

@@ -13,7 +13,7 @@ A secure backend authentication system built with Node.js, Express, and PostgreS
 - **Image Upload**: Multiple image support with thumbnail and gallery images
 - **Security**: Helmet, CORS, rate limiting, and input validation
 - **Database**: PostgreSQL with Drizzle ORM
-- **Email Integration**: Nodemailer for OTP delivery
+- **Email Integration**: Resend for OTP delivery
 - **RESTful API**: Well-structured API endpoints with comprehensive documentation
 
 ## 📋 Prerequisites
@@ -64,9 +64,11 @@ A secure backend authentication system built with Node.js, Express, and PostgreS
    # Database Configuration
    DATABASE_URL=postgresql://username:password@localhost:5432/database_name
 
-   # Email Configuration (Gmail example)
-   MAIL_USER=your-email@gmail.com
-   MAIL_PASS=your-app-password
+   # Email Configuration (Resend)
+   RESEND_API_KEY=re_your-resend-api-key
+   MAIL_FROM_EMAIL=noreply@yourdomain.com
+   MAIL_FROM_NAME=Your App Name
+   ADMIN_EMAIL=admin@yourdomain.com
    ```
 
 4. **Set up the database**
@@ -127,8 +129,10 @@ A secure backend authentication system built with Node.js, Express, and PostgreS
 | `JWT_EXPIRES_IN`         | Access token expiration time        | Yes      | `15m`                                 |
 | `JWT_REFRESH_EXPIRES_IN` | Refresh token expiration time       | Yes      | `7d`                                  |
 | `DATABASE_URL`           | PostgreSQL connection string        | Yes      | `postgresql://user:pass@host:port/db` |
-| `MAIL_USER`              | Email service username              | Yes      | `your-email@gmail.com`                |
-| `MAIL_PASS`              | Email service password/app password | Yes      | `your-app-password`                   |
+| `RESEND_API_KEY`         | Resend API key for email service    | Yes      | `re_your-resend-api-key`              |
+| `MAIL_FROM_EMAIL`        | Email address to send from          | Yes      | `noreply@yourdomain.com`              |
+| `MAIL_FROM_NAME`         | Display name for sender             | No       | `Your App Name`                       |
+| `ADMIN_EMAIL`            | Admin email for contact form        | Yes      | `admin@yourdomain.com`                |
 
 ## 📚 API Documentation
 
@@ -1191,7 +1195,7 @@ export default {
 - `pg` - PostgreSQL client
 - `jsonwebtoken` - JWT token handling
 - `bcryptjs` - Password hashing
-- `nodemailer` - Email service
+- `resend` - Email service
 - `cors` - CORS middleware
 - `helmet` - Security middleware
 - `express-rate-limit` - Rate limiting
@@ -1277,22 +1281,28 @@ This project is licensed under the ISC License.
 
 ### Gmail Setup (Recommended)
 
-1. **Enable 2-Factor Authentication** on your Gmail account
-2. **Generate App Password**:
-   - Go to Google Account settings
-   - Security → 2-Step Verification → App passwords
-   - Generate password for "Mail"
-3. **Use App Password** in your `.env` file:
+1. **Sign up for Resend**: Go to [resend.com](https://resend.com) and create an account
+2. **Get your API Key**:
+   - Go to API Keys section in Resend dashboard
+   - Create a new API key
+   - Copy the API key (starts with `re_`)
+3. **Verify your domain** (required for production):
+   - Add your domain in Resend dashboard
+   - Add the required DNS records
+   - Wait for verification
+4. **Configure in `.env` file**:
    ```env
-   MAIL_USER=your-email@gmail.com
-   MAIL_PASS=your-16-character-app-password
+   RESEND_API_KEY=re_your-resend-api-key
+   MAIL_FROM_EMAIL=noreply@yourdomain.com
+   MAIL_FROM_NAME=Your App Name
+   ADMIN_EMAIL=admin@yourdomain.com
    ```
 
-### Other Email Providers
+### Using Resend
 
-- **Outlook/Hotmail**: Use your regular password or app password
-- **Yahoo**: Enable "Less secure app access" or use app password
-- **Custom SMTP**: Modify `config/mailer.js` with your SMTP settings
+- **Development**: You can use Resend's test domain for development
+- **Production**: You must verify your own domain in Resend
+- **API Limits**: Check Resend's pricing for sending limits
 
 ### Email Templates
 
@@ -1311,10 +1321,10 @@ The system includes HTML email templates for OTP delivery. Templates are located
 
 2. **Email Service Error**
 
-   - Verify `MAIL_USER` and `MAIL_PASS`
-   - For Gmail, use App Password instead of regular password
-   - Check email service settings
-   - Note: Email sending is currently commented out in the code
+   - Verify `RESEND_API_KEY` is correct
+   - Ensure `MAIL_FROM_EMAIL` is verified in Resend (for production)
+   - Check Resend dashboard for API key status
+   - Verify domain is properly configured in Resend (for production)
 
 3. **JWT Token Error**
 
